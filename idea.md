@@ -1,0 +1,6 @@
+5. GHOST ECONOMY — Private Proof-of-Income for the Gig World
+The core insight: 1.5 billion people globally have income but no credit. Gig workers, freelancers, informal economy workers can't get loans, leases, or financial services because they can't prove income without violating privacy or exposing their entire financial history to a corporation they've never met.
+What you build: A ZK income verification protocol where AI agents aggregate private income streams (from any platform — Uber, Upwork, Shopify, whatever), generate a ZK proof that says "this person earns above $X monthly, consistently, for Y months" — without revealing the amount, the platforms, or the specific transactions.
+Financial institutions query the proof. They get exactly the compliance signal they need. The user keeps full data sovereignty.
+The AI layer: Agents pattern-match income consistency, seasonality, and risk signals from private data and surface them as verified attributes. The proof isn't just "they earn X" — it's "their income has these machine-learned stability properties."
+Why this is the biggest swing: You are the financial infrastructure for the informal global economy. The TAM is massive. The competition is zero because nobody else has the privacy-native architecture to do this. Microfinance institutions, neobanks, and DeFi protocols are all immediate customers.

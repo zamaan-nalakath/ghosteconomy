@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+leveldb-*/
+ge-private-state-*/
+ghost-economy-private-state-*/
+midnight-level-db/
