@@ -1,0 +1,114 @@
+pragma language_version >= 0.23;
+
+import CompactStandardLibrary;
+
+struct ProfileEntry {
+  workerCommitment: Bytes<32>,
+  incomeTier: Uint<8>,
+  consistencyMonths: Uint<8>
+}
+
+export ledger profiles: Map<Bytes<32>, ProfileEntry>;
+export ledger nextProfileId: Counter;
+
+witness workerSecret(): Bytes<32>;
+witness monthlyIncomeCents(): Vector<12, Uint<32>>;
+
+export circuit workerCommitment(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ge:worker:"), sk]);
+}
+
+circuit hashIncomeVector(incomes: Vector<12, Uint<32>>): Bytes<32> {
+  return persistentHash<Vector<12, Uint<32>>>(incomes);
+}
+
+export circuit profileCommitment(incomes: Vector<12, Uint<32>>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ge:profile:"), hashIncomeVector(incomes)]);
+}
+
+circuit meetsFloor(income: Uint<32>, floor: Uint<32>): Boolean {
+  return income >= floor;
+}
+
+circuit advanceStreak(prev: Uint<8>, meets: Boolean): Uint<8> {
+  if (meets) {
+    return (prev + 1) as Uint<8>;
+  } else {
+    return 0 as Uint<8>;
+  }
+}
+
+circuit maxUint8(a: Uint<8>, b: Uint<8>): Uint<8> {
+  if (a >= b) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+circuit maxConsecutiveMonths(
+  incomes: Vector<12, Uint<32>>,
+  floor: Uint<32>
+): Uint<8> {
+  const s0 = advanceStreak(0 as Uint<8>, meetsFloor(incomes[0], floor));
+  const m0 = maxUint8(0 as Uint<8>, s0);
+  const s1 = advanceStreak(s0, meetsFloor(incomes[1], floor));
+  const m1 = maxUint8(m0, s1);
+  const s2 = advanceStreak(s1, meetsFloor(incomes[2], floor));
+  const m2 = maxUint8(m1, s2);
+  const s3 = advanceStreak(s2, meetsFloor(incomes[3], floor));
+  const m3 = maxUint8(m2, s3);
+  const s4 = advanceStreak(s3, meetsFloor(incomes[4], floor));
+  const m4 = maxUint8(m3, s4);
+  const s5 = advanceStreak(s4, meetsFloor(incomes[5], floor));
+  const m5 = maxUint8(m4, s5);
+  const s6 = advanceStreak(s5, meetsFloor(incomes[6], floor));
+  const m6 = maxUint8(m5, s6);
+  const s7 = advanceStreak(s6, meetsFloor(incomes[7], floor));
+  const m7 = maxUint8(m6, s7);
+  const s8 = advanceStreak(s7, meetsFloor(incomes[8], floor));
+  const m8 = maxUint8(m7, s8);
+  const s9 = advanceStreak(s8, meetsFloor(incomes[9], floor));
+  const m9 = maxUint8(m8, s9);
+  const s10 = advanceStreak(s9, meetsFloor(incomes[10], floor));
+  const m10 = maxUint8(m9, s10);
+  const s11 = advanceStreak(s10, meetsFloor(incomes[11], floor));
+  return maxUint8(m10, s11);
+}
+
+circuit computeTier(consecutiveMonths: Uint<8>): Uint<8> {
+  if (consecutiveMonths >= 12) {
+    return 3 as Uint<8>;
+  } else if (consecutiveMonths >= 6) {
+    return 2 as Uint<8>;
+  } else if (consecutiveMonths >= 3) {
+    return 1 as Uint<8>;
+  } else {
+    return 0 as Uint<8>;
+  }
+}
+
+export circuit registerIncomeProfile(
+  minMonthlyCents: Uint<32>,
+  requiredMonths: Uint<8>
+): [] {
+  const sk = workerSecret();
+  const incomes = monthlyIncomeCents();
+  const workerCommit = workerCommitment(sk);
+  const profileCommit = profileCommitment(incomes);
+
+  assert(!profiles.member(disclose(profileCommit)), "profile already registered");
+
+  const consistencyMonths = maxConsecutiveMonths(incomes, minMonthlyCents);
+  assert(consistencyMonths >= requiredMonths, "insufficient income consistency");
+
+  const incomeTier = computeTier(consistencyMonths);
+
+  nextProfileId.increment(1);
+
+  profiles.insert(disclose(profileCommit), ProfileEntry {
+    workerCommitment: disclose(workerCommit),
+    incomeTier: disclose(incomeTier),
+    consistencyMonths: disclose(consistencyMonths)
+  });
+}
