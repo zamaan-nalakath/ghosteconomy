@@ -1,0 +1,5 @@
+yarn run v1.22.22
+$ cd contracts && compact compile +0.31.1 ghost-economy.compact managed/ghost-economy
+Compiling 1 circuits:
+  registerIncomeProfile
+Done in 4.32s.

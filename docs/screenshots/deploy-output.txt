@@ -1,0 +1,44 @@
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed NODE_OPTIONS='--experimental-vm-modules' tsx src/deploy-preprod.ts
+[23:20:51.317] [32mINFO[39m (933479): [36mInitializing wallet builder for undeployed[39m
+[23:20:51.606] [32mINFO[39m (933479): [36mCreating dust wallet with params: {"indexerClientConnection":{"indexerHttpUrl":"http://127.0.0.1:8088/api/v4/graphql","indexerWsUrl":"ws://127.0.0.1:8088/api/v4/graphql/ws"},"provingServerUrl":"http://127.0.0.1:6300/","networkId":"undeployed","relayURL":"ws://127.0.0.1:9944/","txHistoryStorage":{"entries":{}},"costParameters":{"ledgerParams":{"__wbg_ptr":4654560},"additionalFeeOverhead":"1000","feeBlocksMargin":5}}[39m
+(node:933479) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[23:20:51.316] INFO (933479): Deploying on undeployed (run yarn env:up first for local)
+[23:20:51.317] INFO (933479): Using genesis wallet (pre-funded on local devnet)
+[23:20:51.674] INFO (933479): Wallet built from seed: 00000000...
+[23:20:51.675] INFO (933479): Starting wallet...
+[23:20:51.802] INFO (933479): Syncing wallet...
+[23:20:51.855] INFO (933479): Wallet sync [1]: shielded=false, unshielded=false, dust=false
+[23:20:52.048] INFO (933479): Wallet sync [2]: shielded=false, unshielded=false, dust=false
+[23:20:52.049] INFO (933479): Wallet sync [3]: shielded=false, unshielded=false, dust=false
+[23:20:52.050] INFO (933479): Wallet sync [4]: shielded=false, unshielded=false, dust=false
+[23:20:52.050] INFO (933479): Wallet sync [5]: shielded=false, unshielded=false, dust=false
+[23:20:52.050] INFO (933479): Wallet sync [6]: shielded=false, unshielded=false, dust=false
+[23:20:52.212] INFO (933479): Wallet sync [7]: shielded=false, unshielded=true, dust=false
+[23:20:52.239] INFO (933479): Wallet sync [8]: shielded=false, unshielded=true, dust=false
+[23:20:52.299] INFO (933479): Wallet sync [9]: shielded=false, unshielded=true, dust=false
+[23:20:52.791] INFO (933479): Wallet sync [10]: shielded=false, unshielded=true, dust=false
+[23:20:52.889] INFO (933479): Wallet sync [11]: shielded=false, unshielded=true, dust=false
+2026-07-06 23:20:53        RPC-CORE: subscribeRuntimeVersion(): RuntimeVersion:: disconnected from ws://127.0.0.1:9944/: 1000:: Normal Closure
+2026-07-06 23:20:53        RPC-CORE: subscribeRuntimeVersion(): RuntimeVersion:: disconnected from ws://127.0.0.1:9944/: 1000:: Normal Closure
+[23:20:53.007] INFO (933479): Wallet sync [12]: shielded=false, unshielded=true, dust=false
+[23:20:53.090] INFO (933479): Wallet sync [13]: shielded=false, unshielded=true, dust=false
+[23:20:53.190] INFO (933479): Wallet sync [14]: shielded=false, unshielded=true, dust=false
+[23:20:53.262] INFO (933479): Wallet sync [15]: shielded=true, unshielded=true, dust=false
+[23:20:53.337] INFO (933479): Wallet sync [16]: shielded=true, unshielded=true, dust=false
+[23:20:53.434] INFO (933479): Wallet sync [17]: shielded=true, unshielded=true, dust=false
+[23:20:53.518] INFO (933479): Wallet sync [18]: shielded=true, unshielded=true, dust=false
+[23:20:53.601] INFO (933479): Wallet sync [19]: shielded=true, unshielded=true, dust=false
+[23:20:53.725] INFO (933479): Wallet sync [20]: shielded=true, unshielded=true, dust=false
+[23:20:53.814] INFO (933479): Wallet sync [21]: shielded=true, unshielded=true, dust=false
+[23:20:53.911] INFO (933479): Wallet sync [22]: shielded=true, unshielded=true, dust=false
+[23:20:53.967] INFO (933479): Wallet sync [23]: shielded=true, unshielded=true, dust=false
+[23:20:54.019] INFO (933479): Wallet sync [24]: shielded=true, unshielded=true, dust=false
+[23:20:54.076] INFO (933479): Wallet sync [25]: shielded=true, unshielded=true, dust=false
+[23:20:54.119] INFO (933479): Wallet sync [26]: shielded=true, unshielded=true, dust=true
+[23:20:54.120] INFO (933479): Wallet sync complete after 26 emissions
+[23:20:54.197] INFO (933479): DUST available (balance=1250000000000000000000000)
+[23:21:14.175] INFO (933479): Contract deployed at: c489761a769a01f1aca643c6e653623ac22f2e8f468f1def7e5a707e64d40591
+[23:21:14.176] INFO (933479): Wrote /home/fahmin/Documents/codes/midnight/ghosteconomy/deployment.json
+Done in 31.64s.

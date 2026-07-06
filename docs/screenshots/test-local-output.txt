@@ -1,0 +1,59 @@
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed yarn test
+$ NODE_OPTIONS='--experimental-vm-modules' vitest run
+
+ RUN  v3.2.7 /home/fahmin/Documents/codes/midnight/ghosteconomy
+
+(node:922481) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Sourcemap for "/home/fahmin/Documents/codes/midnight/ghosteconomy/contracts/managed/ghost-economy/contract/index.js" points to missing source files
+[23:16:58.961] [32mINFO[39m (922481): [36mInitializing wallet builder for undeployed[39m
+[23:16:59.185] [32mINFO[39m (922481): [36mCreating dust wallet with params: {"indexerClientConnection":{"indexerHttpUrl":"http://127.0.0.1:8088/api/v4/graphql","indexerWsUrl":"ws://127.0.0.1:8088/api/v4/graphql/ws"},"provingServerUrl":"http://127.0.0.1:6300/","networkId":"undeployed","relayURL":"ws://127.0.0.1:9944/","txHistoryStorage":{"entries":{}},"costParameters":{"ledgerParams":{"__wbg_ptr":4654560},"additionalFeeOverhead":"1000","feeBlocksMargin":5}}[39m
+[23:16:59.293] INFO (922481): Wallet built from seed: 00000000...
+[23:16:59.294] INFO (922481): Starting wallet...
+[23:16:59.381] INFO (922481): Syncing wallet...
+[23:16:59.437] INFO (922481): Wallet sync [1]: shielded=false, unshielded=false, dust=false
+[23:16:59.549] INFO (922481): Wallet sync [2]: shielded=false, unshielded=false, dust=false
+stderr | src/test/ghost-economy.test.ts > Ghost Economy Contract
+2026-07-06 23:17:00        RPC-CORE: subscribeRuntimeVersion(): RuntimeVersion:: disconnected from ws://127.0.0.1:9944/: 1000:: Normal Closure
+
+stderr | src/test/ghost-economy.test.ts > Ghost Economy Contract
+2026-07-06 23:17:00        RPC-CORE: subscribeRuntimeVersion(): RuntimeVersion:: disconnected from ws://127.0.0.1:9944/: 1000:: Normal Closure
+
+[23:16:59.773] INFO (922481): Wallet sync [3]: shielded=false, unshielded=false, dust=false
+[23:16:59.816] INFO (922481): Wallet sync [4]: shielded=false, unshielded=false, dust=false
+[23:17:00.267] INFO (922481): Wallet sync [5]: shielded=false, unshielded=false, dust=false
+[23:17:00.268] INFO (922481): Wallet sync [6]: shielded=false, unshielded=false, dust=false
+[23:17:00.269] INFO (922481): Wallet sync [7]: shielded=false, unshielded=false, dust=false
+[23:17:00.269] INFO (922481): Wallet sync [8]: shielded=false, unshielded=false, dust=false
+[23:17:00.269] INFO (922481): Wallet sync [9]: shielded=false, unshielded=true, dust=false
+[23:17:00.366] INFO (922481): Wallet sync [10]: shielded=false, unshielded=true, dust=false
+[23:17:00.465] INFO (922481): Wallet sync [11]: shielded=false, unshielded=true, dust=false
+[23:17:00.551] INFO (922481): Wallet sync [12]: shielded=false, unshielded=true, dust=false
+[23:17:00.636] INFO (922481): Wallet sync [13]: shielded=false, unshielded=true, dust=false
+[23:17:00.738] INFO (922481): Wallet sync [14]: shielded=true, unshielded=true, dust=false
+[23:17:00.814] INFO (922481): Wallet sync [15]: shielded=true, unshielded=true, dust=false
+[23:17:00.911] INFO (922481): Wallet sync [16]: shielded=true, unshielded=true, dust=false
+[23:17:01.103] INFO (922481): Wallet sync [17]: shielded=true, unshielded=true, dust=false
+[23:17:01.190] INFO (922481): Wallet sync [18]: shielded=true, unshielded=true, dust=false
+[23:17:01.278] INFO (922481): Wallet sync [19]: shielded=true, unshielded=true, dust=false
+[23:17:01.382] INFO (922481): Wallet sync [20]: shielded=true, unshielded=true, dust=false
+[23:17:01.468] INFO (922481): Wallet sync [21]: shielded=true, unshielded=true, dust=false
+[23:17:01.556] INFO (922481): Wallet sync [22]: shielded=true, unshielded=true, dust=false
+[23:17:01.616] INFO (922481): Wallet sync [23]: shielded=true, unshielded=true, dust=false
+[23:17:01.680] INFO (922481): Wallet sync [24]: shielded=true, unshielded=true, dust=false
+[23:17:01.738] INFO (922481): Wallet sync [25]: shielded=true, unshielded=true, dust=false
+[23:17:01.792] INFO (922481): Wallet sync [26]: shielded=true, unshielded=true, dust=true
+[23:17:01.793] INFO (922481): Wallet sync complete after 26 emissions
+[23:17:01.838] INFO (922481): Providers initialized. Ready to test!
+[23:17:20.709] INFO (922481): Contract deployed at: f02ddbdc3b23886cc3df8fe4cebf6ae0e224a620d4b921350ef175ccbcd50cf0
+ ✓ src/test/ghost-economy.test.ts (4 tests) 45734ms
+   ✓ Ghost Economy Contract > deploys the contract  18895ms
+   ✓ Ghost Economy Contract > registers income profile with disclosed commitments only  23630ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  23:16:50
+   Duration  54.18s (transform 334ms, setup 0ms, collect 7.23s, tests 45.73s, environment 1ms, prepare 369ms)
+
+Done in 56.00s.
