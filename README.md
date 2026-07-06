@@ -52,11 +52,15 @@ If port 6300 is in use, `yarn env:up` starts node + indexer only; keep a proof s
 
 ## Deploy
 
+### Preprod status: currently unstable
+
+Preprod deploy flow is available but currently unstable. Use it for manual validation only; prefer local `undeployed` for deterministic development checks.
+
 ### Local undeployed devnet
 
 ```bash
 yarn env:up
-yarn deploy
+yarn deploy:undeployed
 ```
 
 Uses the pre-funded genesis wallet. Address is written to [`deployment.json`](deployment.json).
@@ -71,6 +75,16 @@ yarn deploy:preprod
 ```
 
 Ensure `midnightntwrk/proof-server:8.0.3` is running locally on port 6300.
+
+### Deploy command reference
+
+```bash
+# Local / undeployed (alias for legacy `yarn deploy`)
+yarn deploy:undeployed
+
+# Preprod
+yarn deploy:preprod
+```
 
 ## Public state vs private witness
 
@@ -107,7 +121,7 @@ contracts/
   managed/ghost-economy/
 src/
   test/ghost-economy.test.ts
-  deploy-preprod.ts
+  deploy.ts
 scripts/
   setup-l1.sh
 ```
@@ -124,7 +138,7 @@ See [`docs/screenshots/`](docs/screenshots/):
 
 | Network | Contract address |
 |---------|------------------|
-| undeployed (local) | `c489761a769a01f1aca643c6e653623ac22f2e8f468f1def7e5a707e64d40591` |
+| undeployed (local) | `ef55420c8523a075aa3625330e05a439ac495bfb1f9b9304f2a26106fc1103dd` |
 
 Preprod: run `yarn deploy:preprod` with a funded `WALLET_SEED` (not configured in this repo).
 
