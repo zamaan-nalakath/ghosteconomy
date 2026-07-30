@@ -9,3 +9,5 @@ leveldb-*/
 ge-private-state-*/
 ghost-economy-private-state-*/
 midnight-level-db/
+web/dist/
+*.tsbuildinfo
