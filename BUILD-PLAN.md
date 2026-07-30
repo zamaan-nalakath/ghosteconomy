@@ -6,8 +6,8 @@ ZK-verified private proof-of-income for the gig economy on [Midnight Network](ht
 
 | Level | Codename | Status | Trigger phrase |
 |-------|----------|--------|----------------|
-| L1 | New Moon | Not started | `go to Level 1` |
-| L2 | Waxing Crescent | Not started | `go to Level 2` |
+| L1 | New Moon | Complete | `go to Level 1` |
+| L2 | Waxing Crescent | Complete | `go to Level 2` |
 | L3 | First Quarter | Not started | `go to Level 3` |
 | L4–L6 | Gibbous → Full Moon | Deferred | See §6 |
 

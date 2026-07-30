@@ -1,0 +1,144 @@
+{
+  "compiler-version": "0.31.1",
+  "language-version": "0.23.0",
+  "runtime-version": "0.16.0",
+  "circuits": [
+    {
+      "name": "workerCommitment",
+      "pure": true,
+      "proof": false,
+      "arguments": [
+        {
+          "name": "sk",
+          "type": {
+            "type-name": "Bytes",
+            "length": 32
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "profileCommitment",
+      "pure": true,
+      "proof": false,
+      "arguments": [
+        {
+          "name": "incomes",
+          "type": {
+            "type-name": "Vector",
+            "length": 12,
+            "type": {
+              "type-name": "Uint",
+              "maxval": 4294967295
+            }
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "registerIncomeProfile",
+      "pure": false,
+      "proof": true,
+      "arguments": [
+        {
+          "name": "minMonthlyCents",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 4294967295
+          }
+        },
+        {
+          "name": "requiredMonths",
+          "type": {
+            "type-name": "Uint",
+            "maxval": 255
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    }
+  ],
+  "witnesses": [
+    {
+      "name": "workerSecret",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "monthlyIncomeCents",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Vector",
+        "length": 12,
+        "type": {
+          "type-name": "Uint",
+          "maxval": 4294967295
+        }
+      }
+    }
+  ],
+  "contracts": [
+  ],
+  "ledger": [
+    {
+      "name": "profiles",
+      "index": 0,
+      "exported": true,
+      "storage": "Map",
+      "key": {
+        "type-name": "Bytes",
+        "length": 32
+      },
+      "value": {
+        "type-name": "Struct",
+        "name": "ProfileEntry",
+        "elements": [
+          {
+            "name": "workerCommitment",
+            "type": {
+              "type-name": "Bytes",
+              "length": 32
+            }
+          },
+          {
+            "name": "incomeTier",
+            "type": {
+              "type-name": "Uint",
+              "maxval": 255
+            }
+          },
+          {
+            "name": "consistencyMonths",
+            "type": {
+              "type-name": "Uint",
+              "maxval": 255
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "nextProfileId",
+      "index": 1,
+      "exported": true,
+      "storage": "Counter"
+    }
+  ]
+}

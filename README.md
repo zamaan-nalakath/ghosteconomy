@@ -13,7 +13,7 @@ ZK-verified private proof-of-income for the gig economy on [Midnight Network](ht
 | Level | Codename | Status |
 |-------|----------|--------|
 | **L1** | New Moon | Complete |
-| L2 | Waxing Crescent | Not started |
+| **L2** | Waxing Crescent | Complete |
 | L3 | First Quarter | Not started |
 
 ## Prerequisites
@@ -22,6 +22,7 @@ ZK-verified private proof-of-income for the gig economy on [Midnight Network](ht
 - **Docker** (local devnet + proof server)
 - **Compact compiler** 0.31.1 (`compact update 0.31.1`)
 - **Yarn 1.22**
+- **Lace** or **1AM** browser wallet (for the web dApp)
 
 ### Install Compact
 
@@ -49,6 +50,31 @@ yarn test:local
 ```
 
 If port 6300 is in use, `yarn env:up` starts node + indexer only; keep a proof server on `http://127.0.0.1:6300`.
+
+## Level 2 frontend
+
+Vite + React dApp with storyline landing, Lace/1AM connect-disconnect, local deploy/join, and `registerIncomeProfile`.
+
+```bash
+yarn env:up                 # node + indexer (proof server on :6300)
+yarn sync:zk                # copy managed ZK assets into web/public
+yarn web:install
+yarn web:dev                # http://localhost:5173
+```
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Night-city storyline landing |
+| `/app` | Wallet, deploy/join, private income form, `registerIncomeProfile` |
+| `/registry` | Public profiles (tier + consistency only) |
+| `/privacy` | Observer vs worker vs lender model |
+
+Point Lace / 1AM at the **undeployed** local network for development. After proving, the registry shows Gold / Silver / Bronze and month counts - never the dollar amounts typed in the form.
+
+```bash
+yarn web:build              # production build
+yarn verify:l2              # sync + test:local + web build
+```
 
 ## Deploy
 
@@ -100,6 +126,8 @@ yarn deploy:preprod
 
 **What an observer learns:** a worker registered a profile at a disclosed income floor with a coarse tier (Bronze/Silver/Gold) and consistency count. They **cannot** recover monthly dollar amounts, income platforms, or individual transactions from chain data alone.
 
+**Privacy claim (L2):** the Prove form accepts exact monthly USD values. After `registerIncomeProfile` confirms, the Registry page shows only truncated commitments, a tier badge, and consistency months.
+
 **L1 limitation:** income is self-attested via witness (no third-party attestation yet).
 
 ## Circuits
@@ -119,11 +147,16 @@ contracts/
   ghost-economy.compact
   witnesses.ts
   managed/ghost-economy/
+web/
+  src/pages/          # Story, Prove, Registry, Privacy
+  src/lib/            # Lace connector + circuit helpers
+  public/zk/          # synced from managed/
 src/
   test/ghost-economy.test.ts
   deploy.ts
 scripts/
   setup-l1.sh
+  sync-zk-assets.mjs
 ```
 
 ## Evidence (L1 submission)
@@ -138,7 +171,7 @@ See [`docs/screenshots/`](docs/screenshots/):
 
 | Network | Contract address |
 |---------|------------------|
-| undeployed (local) | `ef55420c8523a075aa3625330e05a439ac495bfb1f9b9304f2a26106fc1103dd` |
+| undeployed (local) | see [`deployment.json`](deployment.json) |
 
 Preprod: run `yarn deploy:preprod` with a funded `WALLET_SEED` (not configured in this repo).
 

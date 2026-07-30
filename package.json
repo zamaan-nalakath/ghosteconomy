@@ -19,7 +19,12 @@
     "env:down": "docker compose down",
     "setup:l1": "bash scripts/setup-l1.sh",
     "verify:l1": "yarn compile && yarn test:local",
-    "validate": "yarn setup:l1"
+    "validate": "yarn setup:l1",
+    "sync:zk": "node scripts/sync-zk-assets.mjs",
+    "web:install": "cd web && yarn install",
+    "web:dev": "yarn sync:zk && cd web && yarn dev",
+    "web:build": "yarn sync:zk && cd web && yarn build",
+    "verify:l2": "yarn sync:zk && yarn test:local && cd web && yarn build"
   },
   "dependencies": {
     "@midnight-ntwrk/compact-js": "2.5.0",
