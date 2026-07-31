@@ -1,7 +1,20 @@
-import { CompiledContract } from '@midnight-ntwrk/compact-js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { CompiledContract } from '@midnight-ntwrk/midnight-js-protocol/compact-js';
 import { witnesses } from './witnesses.js';
+import { Contract } from './managed/ghost-economy/contract/index.js';
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+export const zkConfigPath = path.resolve(currentDir, 'managed', 'ghost-economy');
+
+/** Node CLI / deploy — absolute asset path for NodeZkConfigProvider. */
+export const CompiledGhostEconomyContract = CompiledContract.make(
+  'GhostEconomyContract',
+  Contract,
+).pipe(
+  CompiledContract.withWitnesses(witnesses),
+  CompiledContract.withCompiledFileAssets(zkConfigPath),
+);
 
 export {
   Contract,
@@ -11,15 +24,10 @@ export {
   type ImpureCircuits,
   type PureCircuits,
 } from './managed/ghost-economy/contract/index.js';
-import { Contract } from './managed/ghost-economy/contract/index.js';
-
-const currentDir = path.dirname(fileURLToPath(import.meta.url));
-export const zkConfigPath = path.resolve(currentDir, 'managed', 'ghost-economy');
-
-export const CompiledGhostEconomyContract = CompiledContract.make(
-  'GhostEconomyContract',
-  Contract,
-).pipe(
-  CompiledContract.withWitnesses(witnesses),
-  CompiledContract.withCompiledFileAssets(zkConfigPath),
-);
+export { ghostEconomyPrivateStateKey } from './constants.js';
+export {
+  witnesses,
+  createInitialPrivateState,
+  uniformMonthlyIncome,
+  type GhostEconomyPrivateState,
+} from './witnesses.js';
