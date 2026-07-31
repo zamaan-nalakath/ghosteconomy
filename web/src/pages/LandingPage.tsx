@@ -1,188 +1,152 @@
-import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
-
-const ease = [0.16, 1, 0.3, 1] as const;
+import { Link } from 'react-router-dom';
+import { ArrowRight, EyeSlash, Medal, Briefcase } from '@phosphor-icons/react';
+import { useProgress } from '../components/ProgressProvider';
 
 export function LandingPage() {
   const reduce = useReducedMotion();
+  const { state } = useProgress();
+  const enterTo = state.onboarded ? '/home' : '/onboarding';
 
   return (
-    <>
-      <section className="hero">
-        <div className="hero-media" aria-hidden>
-          <img
-            src="/images/hero-night.jpg"
-            alt=""
-            width={1600}
-            height={900}
-            fetchPriority="high"
-          />
-          <div className="hero-scrim" />
-        </div>
-        <div className="hero-content">
-          <motion.h1
-            initial={reduce ? false : { opacity: 0, y: 28 }}
+    <div>
+      <section className="relative min-h-[100dvh] overflow-hidden">
+        <img
+          src="/images/hero-night.jpg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div
+          className="absolute inset-0 anim-sodium-haze"
+          style={{
+            background:
+              'linear-gradient(105deg, rgba(9,11,16,0.94) 0%, rgba(9,11,16,0.82) 42%, rgba(9,11,16,0.5) 70%, rgba(9,11,16,0.62) 100%), radial-gradient(ellipse 60% 50% at 80% 30%, rgba(240,163,94,0.16), transparent 55%)',
+          }}
+        />
+
+        <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-end px-4 pb-20 pt-28 md:justify-center md:px-8 md:pb-24 md:pt-20">
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease }}
+            transition={{ duration: 0.45 }}
+            className="font-display text-5xl font-extrabold tracking-tight text-paper md:text-7xl lg:text-8xl"
           >
-            Ghost Economy
+            Ghost<span className="text-accent">Economy</span>
+          </motion.p>
+          <motion.h1
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.06 }}
+            className="mt-6 max-w-[20ch] font-display text-3xl font-extrabold leading-[1.1] tracking-tight text-paper md:text-5xl"
+          >
+            Prove income. Keep the night shift private.
           </motion.h1>
           <motion.p
-            initial={reduce ? false : { opacity: 0, y: 18 }}
+            initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08, ease }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="mt-5 max-w-[42ch] text-base leading-relaxed text-paper/80 md:text-lg"
           >
-            Prove gig income stability without exposing amounts, platforms, or
-            night shifts.
+            Earn a public badge from private months. Lenders see consistency — not every receipt.
           </motion.p>
           <motion.div
-            className="hero-cta"
-            initial={reduce ? false : { opacity: 0, y: 14 }}
+            initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.16, ease }}
+            transition={{ duration: 0.45, delay: 0.18 }}
+            className="mt-8 flex flex-wrap gap-3"
           >
-            <Link to="/app" className="btn btn-primary">
-              Open prover
+            <Link
+              to={enterTo}
+              className="inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-bold text-ink transition hover:bg-accent-dim active:scale-[0.98]"
+            >
+              Get started
+              <ArrowRight size={16} weight="bold" />
             </Link>
-            <Link to="/privacy" className="btn btn-ghost">
-              Privacy model
+            <Link
+              to="/registry"
+              className="inline-flex items-center gap-2 border border-paper/25 px-5 py-3 text-sm font-medium text-paper transition hover:border-paper/50 active:scale-[0.98]"
+            >
+              See public badges
             </Link>
           </motion.div>
         </div>
       </section>
 
-      <div className="marquee" aria-hidden>
-        <div className="marquee-track">
-          {[0, 1].map((copy) => (
-            <span key={copy}>
-              Private witness · Public tier · Consistency months · No dollar
-              amounts · Midnight ZK · Gig night city ·
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <section className="section">
-        <div className="container split">
-          <div className="copy">
-            <h2>Income exists. Credit does not.</h2>
-            <p className="lede">
-              1.5 billion people earn money the ledger cannot politely see.
-              Rides, shops, gigs, cash. Banks ask for a clean paystub. Workers
-              refuse to hand over every receipt.
-            </p>
-          </div>
-          <div className="visual">
-            <img
-              src="/images/gig-desk.jpg"
-              alt="Late-night gig desk under sodium light"
-              width={1200}
-              height={800}
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="container">
-          <h2>How the ghost proof works</h2>
-          <div className="story-rail" style={{ marginTop: '2rem' }}>
+      <section className="border-b border-line py-24 md:py-32">
+        <div className="mx-auto max-w-[1400px] px-4 md:px-8">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-5xl">
+            A passport, not a paystub dump.
+          </h2>
+          <p className="mt-4 max-w-[48ch] text-mist">
+            Built for gig earners who need credit signals — not a lecture on zero-knowledge circuits.
+          </p>
+          <div className="mt-14 grid grid-cols-1 gap-px bg-line md:grid-cols-3">
             {[
               {
-                n: '01',
-                title: 'Keep the months private',
-                body: 'Twelve monthly totals stay in the browser witness. They never hit the indexer.',
+                icon: EyeSlash,
+                title: 'Months stay private',
+                body: 'Twelve totals live in this browser. They never hit the board as plain dollars.',
               },
               {
-                n: '02',
-                title: 'Prove a floor you choose',
-                body: 'registerIncomeProfile checks consistency against a public floor without revealing exact cents.',
+                icon: Briefcase,
+                title: 'Floor you choose',
+                body: 'Pick a public minimum and prove you cleared it — without naming platforms or tips.',
               },
               {
-                n: '03',
-                title: 'Publish only the signal',
-                body: 'The chain stores a profile commitment, a coarse tier, and a consistency count.',
+                icon: Medal,
+                title: 'Badge lenders read',
+                body: 'Bronze, Silver, or Gold from consecutive months above your floor.',
               },
-            ].map((step, i) => (
-              <motion.article
-                key={step.n}
-                className="story-step"
-                initial={reduce ? false : { opacity: 0, y: 20 }}
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={reduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.55, delay: i * 0.06, ease }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="bg-ink p-8 md:p-10 anim-fog-in"
               >
-                <div className="num">{step.n}</div>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
-                </div>
-              </motion.article>
+                <item.icon size={28} weight="duotone" className="text-accent" />
+                <h3 className="mt-6 font-display text-xl font-bold">{item.title}</h3>
+                <p className="mt-3 max-w-[36ch] text-sm leading-relaxed text-mist">{item.body}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <h2>What lenders actually get</h2>
-          <div className="bento" style={{ marginTop: '2rem' }}>
-            <div className="bento-cell wide photo">
-              <img
-                src="/images/privacy-glass.jpg"
-                alt="Rain on glass with city lights"
-                width={1200}
-                height={900}
-                loading="lazy"
-              />
-            </div>
-            <div className="bento-cell tint">
-              <h3>Tier, not salary</h3>
-              <p>
-                Bronze, Silver, or Gold from consecutive months above the floor.
-                No platform names. No raw dollars.
-              </p>
-            </div>
-            <div className="bento-cell">
-              <h3>Commitment, not dump</h3>
-              <p>
-                Observers see profileCommitment and consistencyMonths. The night
-                city of invoices stays in shadow.
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="overflow-hidden border-b border-line bg-ink-elevated py-20">
+        <motion.div
+          className="flex whitespace-nowrap font-display text-5xl font-extrabold tracking-tight text-paper/15 md:text-7xl"
+          animate={reduce ? undefined : { x: ['0%', '-50%'] }}
+          transition={reduce ? undefined : { duration: 32, ease: 'linear', repeat: Infinity }}
+        >
+          <span className="px-8">PROVE / BADGE / BOARD / STREAK / NIGHT CITY / RETURN / </span>
+          <span className="px-8">PROVE / BADGE / BOARD / STREAK / NIGHT CITY / RETURN / </span>
+        </motion.div>
       </section>
 
-      <section className="section-tight">
-        <div className="container split split-reverse">
-          <div className="copy">
-            <h2>Ready when Lace is.</h2>
-            <p className="lede">
-              Connect Lace or 1AM on the local undeployed network, deploy or join,
-              then call registerIncomeProfile from the prover.
+      <section className="py-24 md:py-32">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-end gap-12 px-4 md:grid-cols-2 md:px-8">
+          <div>
+            <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+              Ready when Lace is.
+            </h2>
+            <p className="mt-4 max-w-[48ch] leading-relaxed text-mist">
+              Connect Lace or 1AM on Midnight Preview, enter your months privately, and publish only
+              the badge lenders need.
             </p>
-            <div className="hero-cta">
-              <Link to="/app" className="btn btn-primary">
-                Start proving
-              </Link>
-              <Link to="/registry" className="btn btn-ghost">
-                View registry
-              </Link>
-            </div>
           </div>
-          <div className="visual">
-            <img
-              src="/images/hero-night.jpg"
-              alt="Night city street for Ghost Economy"
-              width={1600}
-              height={900}
-              loading="lazy"
-            />
+          <div className="flex flex-wrap gap-3 md:justify-end">
+            <Link
+              to={state.onboarded ? '/prove' : '/onboarding'}
+              className="inline-flex items-center gap-2 border border-accent px-5 py-3 text-sm font-bold text-accent transition hover:bg-accent hover:text-ink active:scale-[0.98]"
+            >
+              Start proving
+            </Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
