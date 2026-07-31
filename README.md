@@ -2,7 +2,8 @@
 
 ZK-verified private proof-of-income for the gig economy on [Midnight Network](https://midnight.network). Workers prove income stability against a floor without revealing dollar amounts, platforms, or individual transactions.
 
-**Live dApp (Preview):** [https://ghosteconomy.vercel.app](https://ghosteconomy.vercel.app)
+**Live dApp (Preview):** [https://ghosteconomy.vercel.app](https://ghosteconomy.vercel.app)  
+**Live demo video:** [Watch on YouTube](https://youtu.be/8SXWbeyvi98)
 
 | Level | Codename | Status |
 |-------|----------|--------|
@@ -30,6 +31,7 @@ ZK-verified private proof-of-income for the gig economy on [Midnight Network](ht
 |-------|--------|
 | Network | `preview` |
 | Frontend | [ghosteconomy.vercel.app](https://ghosteconomy.vercel.app) |
+| Demo video | [YouTube](https://youtu.be/8SXWbeyvi98) |
 | Contract address | `55de4ffd42d3e55924c40a46d55a3e69074a1282f2a0a8d072fec29e699bc0ec` |
 | Indexer | `https://indexer.preview.midnight.network/api/v4/graphql` |
 | ZK assets | `/zk/ghost-economy` |
