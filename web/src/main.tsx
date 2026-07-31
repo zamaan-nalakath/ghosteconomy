@@ -1,20 +1,8 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import '@fontsource/outfit/300.css';
-import '@fontsource/outfit/400.css';
-import '@fontsource/outfit/500.css';
-import '@fontsource/outfit/600.css';
-import '@fontsource/outfit/700.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
 import './globals';
 import './config.js';
 import '@midnight-ntwrk/dapp-connector-api';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/global.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+createRoot(document.getElementById('root')!).render(<App />);

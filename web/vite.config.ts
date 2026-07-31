@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import tailwindcss from '@tailwindcss/vite';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -15,7 +16,7 @@ const midnightAliases = Object.fromEntries(
 
 export default defineConfig({
   define: { global: 'globalThis' },
-  plugins: [react(), wasm(), topLevelAwait()],
+  plugins: [react(), wasm(), topLevelAwait(), tailwindcss()],
   resolve: {
     alias: {
       '@contracts': path.resolve(__dirname, '../contracts'),
