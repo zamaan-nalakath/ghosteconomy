@@ -1,24 +1,14 @@
-import type { WalletFacade, FacadeState } from '@midnight-ntwrk/wallet-sdk-facade';
-import type { createKeystore } from '@midnight-ntwrk/wallet-sdk-unshielded-wallet';
 import * as Rx from 'rxjs';
-import type { Logger } from 'pino';
+import type { WalletContext } from './wallet.js';
 
-type UnshieldedKeystore = ReturnType<typeof createKeystore>;
-
-function dustBalance(state: FacadeState): bigint {
-  return state.dust.balance(new Date());
-}
-
+/** Register NIGHT for DUST and wait until spendable DUST is available. */
 export async function ensureDust(
-  logger: Logger,
-  wallet: WalletFacade,
-  unshieldedKeystore: UnshieldedKeystore,
+  walletCtx: WalletContext,
   timeoutMs = 180_000,
 ): Promise<void> {
-  let state = await wallet.waitForSyncedState();
+  let state = await walletCtx.wallet.waitForSyncedState();
 
-  if (dustBalance(state) > 0n || state.dust.availableCoins.length > 0) {
-    logger.info(`DUST available (balance=${dustBalance(state)})`);
+  if (state.dust.balance(new Date()) > 0n) {
     return;
   }
 
@@ -27,38 +17,27 @@ export async function ensureDust(
   );
 
   if (unregistered.length > 0) {
-    logger.info(
-      `Registering ${unregistered.length} NIGHT UTXO(s) for DUST generation...`,
-    );
-    const recipe = await wallet.registerNightUtxosForDustGeneration(
+    const recipe = await walletCtx.wallet.registerNightUtxosForDustGeneration(
       unregistered,
-      unshieldedKeystore.getPublicKey(),
-      (payload) => unshieldedKeystore.signData(payload),
+      walletCtx.unshieldedKeystore.getPublicKey(),
+      (payload) => walletCtx.unshieldedKeystore.signData(payload),
     );
-    const signed = await wallet.signRecipe(recipe, (payload) =>
-      unshieldedKeystore.signData(payload),
-    );
-    const finalized = await wallet.finalizeRecipe(signed);
-    await wallet.submitTransaction(finalized);
-    state = await wallet.waitForSyncedState();
-  } else {
-    logger.info('No unregistered NIGHT UTXOs; waiting for DUST to accrue...');
+    const finalized = await walletCtx.wallet.finalizeRecipe(recipe);
+    await walletCtx.wallet.submitTransaction(finalized);
+    state = await walletCtx.wallet.waitForSyncedState();
   }
 
   await Rx.firstValueFrom(
-    wallet.state().pipe(
+    walletCtx.wallet.state().pipe(
       Rx.filter((s) => s.isSynced),
-      Rx.filter((s) => dustBalance(s) > 0n || s.dust.availableCoins.length > 0),
-      Rx.tap((s) =>
-        logger.info(`DUST ready (balance=${dustBalance(s)})`),
-      ),
+      Rx.filter((s) => s.dust.balance(new Date()) > 0n),
       Rx.timeout({
         first: timeoutMs,
         with: () =>
           Rx.throwError(
             () =>
               new Error(
-                `Timed out waiting for DUST after ${timeoutMs}ms. On undeployed, use the genesis wallet (default) or fund NIGHT first.`,
+                `Timed out waiting for DUST after ${timeoutMs}ms. Fund NIGHT and register for DUST first.`,
               ),
           ),
       }),
