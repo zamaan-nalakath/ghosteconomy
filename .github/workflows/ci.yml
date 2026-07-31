@@ -16,12 +16,25 @@ jobs:
           node-version: '22'
 
       - name: Install Compact toolchain
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl --proto '=https' --tlsv1.2 -sSf \
+          set -euxo pipefail
+          curl --proto '=https' --tlsv1.2 -LsSf \
             https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          source $HOME/.local/bin/env
+          # Installer does not create ~/.local/bin/env — expose the bin dir instead.
+          found=0
+          for d in "$HOME/.local/bin" "$HOME/.compact/bin"; do
+            if [ -x "$d/compact" ]; then
+              echo "$d" >> "$GITHUB_PATH"
+              export PATH="$d:$PATH"
+              found=1
+            fi
+          done
+          [ "$found" = 1 ] || { echo "::error::compact binary not found after install"; exit 1; }
+          compact --version
           compact update 0.31.1
+          compact compile --version
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
