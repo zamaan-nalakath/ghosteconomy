@@ -242,22 +242,31 @@ export class BrowserGhostEconomyManager {
 
 export function friendlyError(error: unknown): string {
   const msg = extractErrorMessage(error);
-  if (msg.includes('User rejected')) return 'Transaction cancelled.';
-  if (msg.includes('profile already registered')) return 'This income profile is already on-chain.';
+  if (msg.includes('User rejected')) return 'You cancelled in the wallet. No problem — try again when ready.';
+  if (msg.includes('profile already registered')) {
+    return 'This income pattern already has a badge. Change your months or floor and try again.';
+  }
   if (msg.includes('insufficient income consistency')) {
-    return 'Income does not meet the required consecutive months at the chosen floor.';
+    return 'Not enough consecutive months at that floor yet. Lower the floor or add steadier months.';
   }
   if (msg.includes('No private state found')) {
-    return 'Private state was not initialized. Reconnect your wallet and try again.';
+    return 'Something reset on this device. Connect again, then retry.';
   }
   if (msg.includes('Failed to fetch') || msg.includes('Failed Proof Server')) {
-    return 'Could not reach the proof server. Check wallet network settings and try again.';
+    return 'Couldn’t reach the proof service. Check your wallet network and try again.';
   }
-  if (msg.includes('not authorized')) return 'Wallet connection was rejected.';
+  if (msg.includes('No Midnight wallet')) {
+    return 'No Midnight wallet found. Install Lace or 1AM, then try Connect again.';
+  }
+  if (msg.includes('not authorized')) return 'Wallet connection was declined.';
   if (msg.includes('insufficient') || msg.includes('DUST')) {
-    return 'Insufficient DUST. Fund your wallet from the preview faucet.';
+    return 'Your wallet needs a little more balance. Fund it from the network faucet, then retry.';
   }
-  return msg || 'Unexpected error — check the browser console.';
+  // Avoid dumping raw stacks / hex at consumers
+  if (msg.length > 180 || msg.includes('at ') || msg.includes('0x')) {
+    return 'Something went wrong. Try again in a moment — or reconnect your wallet.';
+  }
+  return msg || 'Something went wrong. Try again in a moment.';
 }
 
 function extractErrorMessage(error: unknown): string {
