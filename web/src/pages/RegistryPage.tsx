@@ -31,7 +31,7 @@ export function RegistryPage() {
             <div>
               <h2 style={{ marginBottom: 0 }}>Profiles on chain</h2>
               <p className="mono" style={{ margin: '0.45rem 0 0', color: 'var(--fog)' }}>
-                {contractAddress ?? 'Join or deploy a contract to load state'}
+                {contractAddress}
               </p>
             </div>
             <button

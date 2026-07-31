@@ -7,6 +7,9 @@ import '@fontsource/outfit/600.css';
 import '@fontsource/outfit/700.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
+import './globals';
+import './config.js';
+import '@midnight-ntwrk/dapp-connector-api';
 import App from './App';
 import './styles/global.css';
 

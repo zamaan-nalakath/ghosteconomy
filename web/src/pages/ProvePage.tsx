@@ -1,9 +1,5 @@
-import { useMemo, useState } from 'react';
 import { useApp } from '../lib/AppContext';
-import {
-  getProfileCommitmentPreview,
-  getWorkerCommitmentPreview,
-} from '../lib/ghost-economy';
+import { NETWORK_ID } from '../config';
 
 const MONTH_LABELS = [
   'M1',
@@ -24,9 +20,14 @@ function centsToDollars(cents: number) {
   return (cents / 100).toFixed(2);
 }
 
+function truncHex(hex: string, head = 12, tail = 8) {
+  return hex.length <= head + tail + 1 ? hex : `${hex.slice(0, head)}…${hex.slice(-tail)}`;
+}
+
 export function ProvePage() {
   const {
-    session,
+    connected,
+    unshieldedAddress,
     contractAddress,
     monthlyIncomeCents,
     minMonthlyCents,
@@ -34,20 +35,15 @@ export function ProvePage() {
     busy,
     error,
     status,
+    profilePreview,
+    workerPreview,
     setMonthlyIncomeCents,
     setMinMonthlyCents,
     setRequiredMonths,
-    deploy,
-    join,
+    connect,
+    disconnect,
     register,
   } = useApp();
-  const [joinInput, setJoinInput] = useState('');
-
-  const profilePreview = useMemo(
-    () => getProfileCommitmentPreview(monthlyIncomeCents),
-    [monthlyIncomeCents],
-  );
-  const workerPreview = useMemo(() => getWorkerCommitmentPreview(), []);
 
   function updateMonth(index: number, dollars: string) {
     const next = [...monthlyIncomeCents];
@@ -73,47 +69,39 @@ export function ProvePage() {
         </header>
 
         <section className="panel">
-          <h2>Contract</h2>
-          <div className="grid-2">
-            <div>
-              <p className="hint" style={{ marginTop: 0, color: 'var(--fog)' }}>
-                Network: undeployed local. Connect Lace or 1AM, then deploy a
-                fresh contract or join an existing address.
-              </p>
-              <p className="mono" style={{ marginTop: '0.75rem' }}>
-                {contractAddress ?? 'No contract selected'}
-              </p>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
+          <h2>Wallet &amp; contract</h2>
+          <p className="hint" style={{ marginTop: 0, color: 'var(--fog)' }}>
+            Lace / 1AM on <code>{NETWORK_ID}</code>. Connect to join the deployed contract.
+          </p>
+          <div className="row" style={{ marginTop: '0.75rem', flexWrap: 'wrap', gap: '0.65rem' }}>
+            {!connected ? (
               <button
                 type="button"
                 className="btn btn-primary"
-                disabled={busy || !session}
-                onClick={() => void deploy()}
-              >
-                Deploy
-              </button>
-              <div className="field" style={{ flex: '1 1 12rem' }}>
-                <label htmlFor="join-address">Join address</label>
-                <input
-                  id="join-address"
-                  value={joinInput}
-                  onChange={(e) => setJoinInput(e.target.value)}
-                  placeholder="64-char hex"
-                  spellCheck={false}
-                />
-              </div>
-              <button
-                type="button"
-                className="btn btn-ghost"
                 disabled={busy}
-                onClick={() => void join(joinInput)}
-                style={{ alignSelf: 'end' }}
+                onClick={() => void connect()}
               >
-                Join
+                Connect Lace / 1AM
               </button>
-            </div>
+            ) : (
+              <>
+                <span className="status-chip">
+                  {unshieldedAddress ? truncHex(unshieldedAddress) : 'Connected'}
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  disabled={busy}
+                  onClick={() => void disconnect()}
+                >
+                  Disconnect
+                </button>
+              </>
+            )}
           </div>
+          <p className="mono" style={{ marginTop: '0.85rem', wordBreak: 'break-all' }}>
+            {contractAddress}
+          </p>
         </section>
 
         <section className="panel">
@@ -188,7 +176,7 @@ export function ProvePage() {
             <button
               type="button"
               className="btn btn-primary"
-              disabled={busy || !session || !contractAddress}
+              disabled={busy || !connected}
               onClick={() => void register()}
             >
               Call registerIncomeProfile

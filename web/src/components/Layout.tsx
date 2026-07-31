@@ -8,7 +8,7 @@ function trunc(hex: string, head = 6, tail = 4) {
 }
 
 export function NavBar() {
-  const { session, busy, connect, disconnect } = useApp();
+  const { connected, unshieldedAddress, busy, connect, disconnect } = useApp();
 
   return (
     <>
@@ -27,10 +27,10 @@ export function NavBar() {
             <NavLink to="/privacy">Privacy</NavLink>
           </nav>
           <div className="nav-actions">
-            {session ? (
+            {connected && unshieldedAddress ? (
               <>
-                <span className="wallet-chip" title={session.unshieldedAddress}>
-                  {trunc(session.unshieldedAddress)}
+                <span className="wallet-chip" title={unshieldedAddress}>
+                  {trunc(unshieldedAddress)}
                 </span>
                 <button
                   type="button"
