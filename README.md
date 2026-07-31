@@ -1,179 +1,128 @@
 # Ghost Economy
 
-ZK-verified private proof-of-income for the gig economy on [Midnight Network](https://midnight.network). Workers prove income stability and eligibility thresholds without revealing amounts, platforms, or individual transactions. Financial institutions receive only the compliance signals they need; workers keep full data sovereignty.
+ZK-verified private proof-of-income for the gig economy on [Midnight Network](https://midnight.network). Workers prove income stability against a floor without revealing dollar amounts, platforms, or individual transactions.
 
-## Product idea
-
-**1.5 billion people** globally have income but no credit. Gig workers, freelancers, and informal-economy workers cannot get loans, leases, or financial services because they cannot prove income without violating privacy or exposing their entire financial history.
-
-**Ghost Economy** is a ZK income-verification protocol where agents aggregate private income streams (Uber, Upwork, Shopify, cash, etc.), generate a proof that *"this person earns above $X monthly, consistently, for Y months"* — without revealing the amount, the platforms, or specific transactions. Financial institutions query the proof and receive exactly the compliance signal they need.
-
-## Hackathon level
+**Live dApp (Preview):** [https://ghosteconomy.vercel.app](https://ghosteconomy.vercel.app)
 
 | Level | Codename | Status |
 |-------|----------|--------|
-| **L1** | New Moon | Complete |
-| **L2** | Waxing Crescent | Complete |
-| L3 | First Quarter | Not started |
+| L1 | New Moon | Complete |
+| L2 | Waxing Crescent | Complete |
+| **L3** | **First Quarter** | **Complete** |
 
-## Prerequisites
+## Screenshots
 
-- **Node.js 22+**
-- **Docker** (local devnet + proof server)
-- **Compact compiler** 0.31.1 (`compact update 0.31.1`)
-- **Yarn 1.22**
-- **Lace** or **1AM** browser wallet (for the web dApp)
+### Landing (desktop)
 
-### Install Compact
+![Landing desktop](docs/screenshots/frontend-landing-desktop.png)
 
-```bash
-curl --proto '=https' --tlsv1.2 -sSf \
-  https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-source $HOME/.local/bin/env
-compact update 0.31.1
-compact compile --version
+### Badge registry (desktop)
+
+![Registry desktop](docs/screenshots/frontend-app-desktop.png)
+
+### Landing (mobile)
+
+![Landing mobile](docs/screenshots/frontend-landing-mobile.png)
+
+## Preview deployment
+
+| Field | Value |
+|-------|--------|
+| Network | `preview` |
+| Frontend | [ghosteconomy.vercel.app](https://ghosteconomy.vercel.app) |
+| Contract address | `55de4ffd42d3e55924c40a46d55a3e69074a1282f2a0a8d072fec29e699bc0ec` |
+| Indexer | `https://indexer.preview.midnight.network/api/v4/graphql` |
+| ZK assets | `/zk/ghost-economy` |
+
+Config source: [`web/src/config.ts`](web/src/config.ts). Connect **Lace** or **1AM** on **preview**.
+
+## Test output (4 tests passing)
+
+```text
+fahmin@Defiance15:~/midnight/ghosteconomy$ yarn test:local
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed yarn test
+$ NODE_OPTIONS='--experimental-vm-modules' vitest run
+
+ RUN  v3.2.4 /home/fahmin/midnight/ghosteconomy
+
+ ✓ src/test/ghost-economy.test.ts (4)
+   ✓ Ghost Economy Contract (4)
+     ✓ deploys the contract
+     ✓ registers income profile with disclosed commitments only
+     ✓ rejects duplicate profile registration
+     ✓ rejects insufficient income consistency
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  03:13:08
+   Duration  52.64s
+
+Done in 53.41s.
 ```
 
-## Setup
+Full dump: [`docs/screenshots/test-passing.txt`](docs/screenshots/test-passing.txt).
 
-```bash
-yarn setup:l1
-```
-
-Or manually:
-
-```bash
-yarn install
-yarn compile
-yarn env:up
-yarn test:local
-```
-
-If port 6300 is in use, `yarn env:up` starts node + indexer only; keep a proof server on `http://127.0.0.1:6300`.
-
-## Level 2 frontend
-
-Vite + React dApp with storyline landing, Lace/1AM connect-disconnect, local deploy/join, and `registerIncomeProfile`.
-
-```bash
-yarn env:up                 # node + indexer (proof server on :6300)
-yarn sync:zk                # copy managed ZK assets into web/public
-yarn web:install
-yarn web:dev                # http://localhost:5173
-```
-
-| Route | Purpose |
-|-------|---------|
-| `/` | Night-city storyline landing |
-| `/app` | Wallet, deploy/join, private income form, `registerIncomeProfile` |
-| `/registry` | Public profiles (tier + consistency only) |
-| `/privacy` | Observer vs worker vs lender model |
-
-Point Lace / 1AM at the **undeployed** local network for development. After proving, the registry shows Gold / Silver / Bronze and month counts - never the dollar amounts typed in the form.
-
-```bash
-yarn web:build              # production build
-yarn verify:l2              # sync + test:local + web build
-```
-
-## Deploy
-
-### Preprod status: currently unstable
-
-Preprod deploy flow is available but currently unstable. Use it for manual validation only; prefer local `undeployed` for deterministic development checks.
-
-### Local undeployed devnet
-
-```bash
-yarn env:up
-yarn deploy:undeployed
-```
-
-Uses the pre-funded genesis wallet. Address is written to [`deployment.json`](deployment.json).
-
-### Preprod
-
-Fund a wallet via the [Preprod faucet](https://faucet.preprod.midnight.network), then:
-
-```bash
-export WALLET_SEED="<your-funded-preprod-seed-or-mnemonic>"
-yarn deploy:preprod
-```
-
-Ensure `midnightntwrk/proof-server:8.0.3` is running locally on port 6300.
-
-### Deploy command reference
-
-```bash
-# Local / undeployed (alias for legacy `yarn deploy`)
-yarn deploy:undeployed
-
-# Preprod
-yarn deploy:preprod
-```
-
-## Public state vs private witness
+## Privacy claim
 
 | Data | Visibility | Where |
 |------|------------|-------|
 | `workerSecret` | **Private** | Witness + local private state |
-| `monthlyIncomeCents` (12 months) | **Private** | Witness only |
+| Monthly income vector (12 months) | **Private** | Witness only |
 | `profileCommitment` | **Public** | `profiles` map key |
 | `workerCommitment` | **Public** | `ProfileEntry.workerCommitment` |
-| `incomeTier` (0–3 bucket) | **Public** | `ProfileEntry.incomeTier` |
-| `consistencyMonths` | **Public** | `ProfileEntry.consistencyMonths` |
-| `minMonthlyCents`, `requiredMonths` | **Public** | Circuit arguments (floor the worker chose to prove against) |
+| `incomeTier` (0–3) | **Public** | Coarse Bronze / Silver / Gold |
+| `consistencyMonths` | **Public** | Consecutive months above floor |
 
-**What an observer learns:** a worker registered a profile at a disclosed income floor with a coarse tier (Bronze/Silver/Gold) and consistency count. They **cannot** recover monthly dollar amounts, income platforms, or individual transactions from chain data alone.
-
-**Privacy claim (L2):** the Prove form accepts exact monthly USD values. After `registerIncomeProfile` confirms, the Registry page shows only truncated commitments, a tier badge, and consistency months.
-
-**L1 limitation:** income is self-attested via witness (no third-party attestation yet).
+**What an observer learns:** a worker registered at a disclosed floor with a tier badge and consistency count. They cannot recover monthly dollars, platforms, or transactions from chain data alone.
 
 ## Circuits
 
 | Circuit | Purpose |
 |---------|---------|
-| `workerCommitment(sk)` | `persistentHash` with domain `"ge:worker:"` |
-| `profileCommitment(incomes)` | `persistentHash` with domain `"ge:profile:"` over 12-month vector |
-| `registerIncomeProfile(minMonthlyCents, requiredMonths)` | Validates witness incomes ≥ floor for consecutive months; computes tier; inserts `ProfileEntry` |
+| `registerIncomeProfile(minMonthlyCents, requiredMonths)` | Prove incomes ≥ floor; disclose tier + consistency |
+| `workerCommitment` / `profileCommitment` | Pure commitment helpers |
 
-Tier buckets (circuit constants): Bronze ≥ 3 consecutive months, Silver ≥ 6, Gold ≥ 12.
+Tier buckets: Bronze ≥ 3 months, Silver ≥ 6, Gold ≥ 12.
+
+## Quick start
+
+```bash
+nvm use 22
+yarn install
+yarn compile
+yarn env:up
+yarn test:local
+yarn sync:zk
+yarn web:dev          # http://127.0.0.1:5173
+```
+
+| Script | Purpose |
+|--------|---------|
+| `yarn test:local` | Integration tests on undeployed |
+| `yarn deploy:preview` | Deploy contract to preview |
+| `yarn web:build` | Production Vite build (`web/` → Vercel root) |
+| `yarn sync:zk` | Copy managed ZK assets into `web/public` |
 
 ## Project structure
 
 ```
-contracts/
-  ghost-economy.compact
-  witnesses.ts
-  managed/ghost-economy/
-web/
-  src/pages/          # Story, Prove, Registry, Privacy
-  src/lib/            # Lace connector + circuit helpers
-  public/zk/          # synced from managed/
-src/
-  test/ghost-economy.test.ts
-  deploy.ts
-scripts/
-  setup-l1.sh
-  sync-zk-assets.mjs
+contracts/   Compact + managed ZK artifacts
+api/         Shared contract helpers
+src/         Wallet, deploy, vitest
+web/         React 19 + Vite dApp (Vercel root directory)
 ```
 
-## Evidence (L1 submission)
+## Toolchain
 
-See [`docs/screenshots/`](docs/screenshots/):
-
-- `compile-output.txt` — `yarn compile` listing `registerIncomeProfile`
-- `test-local-output.txt` — 4/4 vitest tests passing
-- `deploy-output.txt` — deploy with contract address
-
-## Deployed contract
-
-| Network | Contract address |
-|---------|------------------|
-| undeployed (local) | see [`deployment.json`](deployment.json) |
-
-Preprod: run `yarn deploy:preprod` with a funded `WALLET_SEED` (not configured in this repo).
+| Component | Version |
+|-----------|---------|
+| Node.js | 22+ |
+| Compact | 0.31.1 |
+| compact-runtime | 0.16.0 |
+| compact-js | 2.5.1 |
+| midnight-js | 4.1.1 |
+| ledger-v8 | 8.1.0 |
 
 ## License
 

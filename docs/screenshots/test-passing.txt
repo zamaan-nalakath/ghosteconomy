@@ -1,0 +1,21 @@
+fahmin@Defiance15:~/midnight/ghosteconomy$ yarn test:local
+yarn run v1.22.22
+$ MIDNIGHT_NETWORK=undeployed yarn test
+$ NODE_OPTIONS='--experimental-vm-modules' vitest run
+
+ RUN  v3.2.4 /home/fahmin/midnight/ghosteconomy
+
+ ✓ src/test/ghost-economy.test.ts (4)
+   ✓ Ghost Economy Contract (4)
+     ✓ deploys the contract
+     ✓ registers income profile with disclosed commitments only
+     ✓ rejects duplicate profile registration
+     ✓ rejects insufficient income consistency
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  03:13:08
+   Duration  52.64s (transform 398ms, setup 0ms, collect 1.91s, tests 50.18s, environment 0ms, prepare 94ms)
+
+Done in 53.41s.
+fahmin@Defiance15:~/midnight/ghosteconomy$
